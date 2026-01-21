@@ -18,11 +18,12 @@ services:
     restart: unless-stopped
 
   db:
+    container_name: quickforum_db
     image: docker.io/mariadb:10.11
     environment:
       MYSQL_ROOT_PASSWORD: foro_pass
       MYSQL_DATABASE: foro
     volumes:
       - db_data:/var/lib/mysql
-      - ./Web_test/BBDD/script_creacion.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./BBDD/script_creacion.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
