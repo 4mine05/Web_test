@@ -27,3 +27,5 @@ services:
       - db_data:/var/lib/mysql
       - ./BBDD/script_creacion.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
+volumes:
+  db_data:
