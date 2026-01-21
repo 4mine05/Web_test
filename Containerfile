@@ -4,7 +4,7 @@ RUN docker-php-ext-install pdo pdo_mysql mysqli
 RUN a2enmod rewrite headers
 RUN git clone https://github.com/4mine05/Web_test.git
 
-COPY Web_test/ /var/www/html/
+COPY . /var/www/html/
 
 RUN chown -R www-data:www-data /var/www/html \
  && chmod -R 755 /var/www/html \
