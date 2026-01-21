@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  web:
+    container_name: quickforum_web
+    build:
+      context: .
+      dockerfile: Containerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASS: foro_pass
+      DB_NAME: foro
+    restart: unless-stopped
+
+  db:
+    image: docker.io/mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: foro_pass
+      MYSQL_DATABASE: foro
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./Web_test/BBDD/script_creacion.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
