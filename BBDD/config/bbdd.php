@@ -1,6 +1,6 @@
 <?php
 
-$DB_HOST = 'localhost';
+$DB_HOST = '10.11.12.13';
 $DB_USER = 'root';
 $DB_PASS = '';
 $DB_NAME = 'foro';
