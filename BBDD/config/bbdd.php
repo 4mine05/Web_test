@@ -1,8 +1,8 @@
 <?php
 
-$DB_HOST = '10.11.12.13';
+$DB_HOST = 'db';
 $DB_USER = 'root';
-$DB_PASS = '';
+$DB_PASS = 'foro_pass';
 $DB_NAME = 'foro';
 $DB_PORT = 3306;
 
