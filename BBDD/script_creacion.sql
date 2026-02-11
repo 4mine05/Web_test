@@ -97,8 +97,9 @@ INSERT INTO posts (id_usuario, titulo, resumen, contenido, categoria, estado)
 VALUES (1, 'Bienvenidos a QuickForum', 'Este es el primer post de prueba para comprobar el feed.', 'Contenido completo del post. Aquí puedes escribir varias líneas y probar el salto de línea. \nSegunda línea del contenido.', 'General', 'publicado');
 */
 
-INSERT INTO posts (id_usuario, titulo, resumen, contenido, categoria, estado)
+/*INSERT INTO posts (id_usuario, titulo, resumen, contenido, categoria, estado)
 VALUES (1, 'Bienvenidos a QuickForum', 'Este es el primer post de prueba para comprobar el feed.', 'Contenido completo del post. Aquí puedes escribir varias líneas y probar el salto de línea. \nSegunda línea del contenido.', 'General', 'publicado');
 select * from posts;
 select * from comentarios;
 select * from usuarios;
+*/
