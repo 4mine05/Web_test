@@ -1,0 +1,55 @@
+name: CI - PHP Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mariadb:10.11
+        env:
+          MYSQL_ROOT_PASSWORD: foro_pass
+          MYSQL_DATABASE: foro
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli
+          coverage: none
+
+      - name: Install Composer
+        run: |
+          curl -sS https://getcomposer.org/installer | php
+          mv composer.phar /usr/local/bin/composer
+
+      - name: Install PHPUnit
+        run: composer require --dev phpunit/phpunit
+
+      - name: Wait for database
+        run: sleep 15
+
+      - name: Import database
+        run: mysql -h 127.0.0.1 -uroot -pforo_pass foro < BBDD/script_creacion.sql
+
+      - name: Run Tests
+        env:
+          DB_HOST: 127.0.0.1
+        run: ./vendor/bin/phpunit tests
