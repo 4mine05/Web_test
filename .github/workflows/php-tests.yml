@@ -59,7 +59,7 @@ jobs:
             exit 1
           fi
           if ! grep -q "\$DB_HOST = 'db';" BBDD/config/bbdd.php; then
-            echo "##[error]¡ERROR! El host de la base de datos debe ser 'db' (para Docker/GitHub Actions)."
+            echo "##[error]¡ERROR! El host de la base de datos debe ser 'db'."
             exit 1
           fi
           if ! grep -q "\$DB_NAME = 'foro';" BBDD/config/bbdd.php; then
