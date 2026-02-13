@@ -19,8 +19,7 @@ class DatabaseTest extends TestCase
 
     public function testConexionBD()
     {
-        $this->assertNot
-            False($this->conexion);
+        $this->assertNotFalse($this->conexion);
     }
 
     public function testSelectBasico()
