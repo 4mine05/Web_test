@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mariadb:
+      db:
         image: mariadb:10.11
         env:
           MYSQL_ROOT_PASSWORD: foro_pass
@@ -49,7 +49,24 @@ jobs:
       - name: Import database
         run: mysql -h 127.0.0.1 -uroot -pforo_pass foro < BBDD/script_creacion.sql
 
+      # Validar que bbdd.php NO ha sido modificado
+      - name: Verificar configuración de base de datos
+        run: |
+          if ! grep -q "\$DB_PASS = 'foro_pass';" BBDD/config/bbdd.php; then
+            echo "##[error]¡ERROR! La contraseña de la base de datos en BBDD/config/bbdd.php ha sido modificada."
+            echo "##[error]El valor esperado es: \$DB_PASS = 'foro_pass';"
+            echo "##[error]Cualquier cambio en credenciales rompe la integración automática."
+            exit 1
+          fi
+          if ! grep -q "\$DB_HOST = 'db';" BBDD/config/bbdd.php; then
+            echo "##[error]¡ERROR! El host de la base de datos debe ser 'db' (para Docker/GitHub Actions)."
+            exit 1
+          fi
+          if ! grep -q "\$DB_NAME = 'foro';" BBDD/config/bbdd.php; then
+            echo "##[error]¡ERROR! El nombre de la base de datos debe ser 'foro'."
+            exit 1
+          fi
+          echo "Configuración de base de datos correcta."
+
       - name: Run Tests
-        env:
-          DB_HOST: 127.0.0.1
         run: ./vendor/bin/phpunit tests
