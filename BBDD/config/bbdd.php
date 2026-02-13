@@ -2,7 +2,7 @@
 
 $DB_HOST = 'db';
 $DB_USER = 'root';
-$DB_PASS = 'foro_pass';
+$DB_PASS = 'foropass';
 $DB_NAME = 'foro';
 $DB_PORT = 3306;
 
