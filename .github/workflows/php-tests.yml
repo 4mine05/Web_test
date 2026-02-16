@@ -44,29 +44,30 @@ jobs:
         run: composer require --dev phpunit/phpunit
 
       - name: Wait for database
-        run: sleep 15
+        run: |
+          until mysqladmin ping -h127.0.0.1 -uroot -pforo_pass --silent; do
+            echo "Esperando a MariaDB..."
+            sleep 2
+          done
+          echo "MariaDB lista"
 
-      - name: Import database
+      - name: Base de Datos
         run: mysql -h 127.0.0.1 -uroot -pforo_pass foro < BBDD/script_creacion.sql
 
-      # Validar que bbdd.php NO ha sido modificado
-      - name: Verificar configuración de base de datos
+      - name: Extaraer parámetros y probar conexión
         run: |
-          if ! grep -q "\$DB_PASS = 'foro_pass';" BBDD/config/bbdd.php; then
-            echo "##[error]¡ERROR! La contraseña de la base de datos en BBDD/config/bbdd.php ha sido modificada."
-            echo "##[error]El valor esperado es: \$DB_PASS = 'foro_pass';"
-            echo "##[error]Cualquier cambio en credenciales rompe la integración automática."
+          DB_USER=$(grep DB_USER ../BBDD/config/bbdd.php | head -1 | cut -d"'" -f2)
+          DB_PASS=$(grep DB_PASS ../BBDD/config/bbdd.php | head -1 | cut -d"'" -f2)
+          DB_NAME=$(grep DB_NAME ../BBDD/config/bbdd.php | head -1 | cut -d"'" -f2)
+
+          mysql -h 127.0.0.1 -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" -e "exit"
+
+          if [ $? -ne 0 ]; then
+            echo "Fallo en la conexión"
             exit 1
+          else
+            echo "Conexión exitosa"
           fi
-          if ! grep -q "\$DB_HOST = 'db';" BBDD/config/bbdd.php; then
-            echo "##[error]¡ERROR! El host de la base de datos debe ser 'db'."
-            exit 1
-          fi
-          if ! grep -q "\$DB_NAME = 'foro';" BBDD/config/bbdd.php; then
-            echo "##[error]¡ERROR! El nombre de la base de datos debe ser 'foro'."
-            exit 1
-          fi
-          echo "Configuración de base de datos correcta."
 
       - name: Run Tests
         run: ./vendor/bin/phpunit tests
