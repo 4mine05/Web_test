@@ -56,6 +56,7 @@ jobs:
 
       - name: Extaraer parámetros y probar conexión
         run: |
+          ls 
           DB_USER=$(grep DB_USER ../BBDD/config/bbdd.php | head -1 | cut -d"'" -f2)
           DB_PASS=$(grep DB_PASS ../BBDD/config/bbdd.php | head -1 | cut -d"'" -f2)
           DB_NAME=$(grep DB_NAME ../BBDD/config/bbdd.php | head -1 | cut -d"'" -f2)
