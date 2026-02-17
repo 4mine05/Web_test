@@ -45,7 +45,7 @@ jobs:
 
       - name: Wait for database
         run: |
-          until mysqladmin ping -h127.0.0.1 -uroot -pforo_pass --silent; do
+          until mysqladmin ping -h127.0.0.1 -uroot -pforo_pass; do
             echo "Esperando a MariaDB..."
             sleep 2
           done
